@@ -38,6 +38,7 @@ namespace iBlog.Controllers
             }
             catch (SqlException)
             {
+
                 return RedirectToAction();
             }
         }

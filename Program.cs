@@ -8,9 +8,9 @@ using iBlog.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
-var adminPassword = builder.Configuration["AdminPassword"];
-var email = builder.Configuration["email"];
-var sqlConnection = builder.Configuration["ConnectionStrings:iBlogConn:SqlDb"];
+//var adminPassword = builder.Configuration["AdminPassword"];
+//var email = builder.Configuration["email"];
+var sqlConnection = builder.Configuration.GetConnectionString("iBlogConn");
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSqlServer<AppIdentityDbContext>(sqlConnection, opts => opts.EnableRetryOnFailure());
@@ -35,7 +35,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Blog/Error");
+    app.UseExceptionHandler("/Home/Error");
 }
 app.UseStaticFiles();
 
