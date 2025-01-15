@@ -1,0 +1,11 @@
+﻿@page
+@model iBlog.Pages.Account.AccessDeniedModel
+@{
+    ViewData["Title"] = "AccessDenied - Admin Only";
+}
+
+<div class="text-center">
+<p class="display-4">Forbideen!</p>
+<span>This page is protected and can only be accessed by admin 🙂</span>
+<a asp-action="Index" asp-controller="Blog">Go home</a>
+</div>

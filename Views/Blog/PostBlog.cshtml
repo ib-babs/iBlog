@@ -1,0 +1,48 @@
+﻿@model BlogModel
+
+@{
+    ViewData["Title"] = "New";
+}
+<main style="display:grid; margin: auto; max-width:700px" class="mt-4">
+    <div class="mt-4">
+        <h2>New Blog</h2>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form asp-action="PostBlog" method="post" id="postForm">
+            <div class="mb-3">
+                <input type="text" asp-for="Title" class="form-control" placeholder="Title" />
+                <span class="text-danger" asp-validation-for="Title"></span>
+            </div>
+            <div class="mb-3 card">
+                <div class="card-header bg-transparent">
+                    <button type="button" class="btn" id="bold-btn"><i class="fa fa-bold" aria-hidden="true"></i></button>
+                    <button type="button" class="btn" id="italics-btn"><i class="fa fa-italic" aria-hidden="true"></i></button>
+                    <button type="button" class="btn" id="link-btn"><i class="fa fa-link" aria-hidden="true"></i></button>
+                    <button type="button" class="btn" id="image-btn"><i class="fa fa-image" aria-hidden="true"></i></button>
+                    <button type="button" class="btn" id="video-btn"><i class="fa fa-video-camera" aria-hidden="true"></i></button>
+                </div>
+                <div class="card-body">
+                    <textarea asp-for="Content" class="form-control" placeholder="Content" rows="8"></textarea>
+                    <span class="text-danger" asp-validation-for="Content"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <input type="url" asp-for="ImageUrlPath" class="form-control" placeholder="ImageUrlPath" />
+                <span class="text-danger" asp-validation-for="ImageUrlPath"></span>
+            </div>
+            <select asp-for="Category" class="form-control mb-3">
+                <option value="Tech">Tech</option>
+                <option value="Sport">Sport</option>
+                <option value="Business">Business</option>
+                <option value="Romance">Romance</option>
+                <option value="Drama">Drama</option>
+            </select>
+            <div class="container" id="preview-page-container" style="max-width:700px" hidden>
+                <p class="display-6">Previewing</p><br />
+                <p id="preview-page" class="p-4 shadow"></p>
+            </div>
+            <button type="submit" class="btn btn-dark" id="postBtn">Post</button>
+            <button type="button" class="btn btn-purple-outline" id="previewBtn">Preview Blog</button>
+        </form>
+        <script async type="module" src="~/js/PostBlog.js" asp-append-version="true"></script>
+    </div>
+</main>

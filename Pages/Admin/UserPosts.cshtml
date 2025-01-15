@@ -1,0 +1,26 @@
+﻿@page "{userId?}/{blogPage?}"
+@model iBlog.Pages.Admin.UserPostsModel
+@{
+    ViewData["Title"] = "User Posts";
+    ViewData["show-edit-delete-btn"] = true;
+    ViewData["show-view-btn"] = true;
+}
+<h4 class="text-muted text-center" style="margin-bottom: -0.5em">@(string.IsNullOrWhiteSpace(Model.UserName) ? "Users' Posts" : $"{Model.UserName}'s Posts") </h4>
+@if (Model.PageListView != null)
+{
+    @if (Model.PageListView.Blogs?.Count() > 0)
+    {
+         <main class="blog-grid">
+            @foreach (var post in Model.PageListView.Blogs)
+            {
+                    <partial name="../../Views/Shared/_BlogView" model="post" />
+            }
+        </main>
+        <div page-model="Model.PageListView?.PageInfo" is-page="true" page-action="./UserPosts" category="@Model.PageListView?.Category" page-class-enabled="true" page-selected-class="btn btn-dark" page-unselected-class="btn btn-outline-dark" class="text-center"></div>
+
+    }
+    else
+    {
+        <i>No posts!</i>
+    }
+}

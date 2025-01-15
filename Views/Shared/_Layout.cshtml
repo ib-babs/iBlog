@@ -1,0 +1,60 @@
+﻿@inject UserManager<ApplicationUser> _userManager
+@inject SignInManager<ApplicationUser> _signInManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - iBlog</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome-free-6.5.1-web/css/all.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/iBlog.styles.css" asp-append-version="true" />
+</head>
+<body>
+
+    <header class="header-container container-fluid">
+        <a class="navbar-brand logo" asp-area="" asp-controller="Blog" asp-action="Index">iBLOG</a>
+        <nav class="auth-container">
+            @if (User != null && _signInManager.IsSignedIn(User))
+            {
+                <a asp-page="/Account/Profile" asp-route-userId="@((await _userManager.GetUserAsync(User))?.Id)" class="profile-link">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d36ea9b2ff12b191b01b86abf793f36575ecbcacefae50beac8362b2659b3c4a?placeholderIfAbsent=true&apiKey=be9dd76967b54f6f9d2e8ebdbf61012b" alt="User avatar" class="user-avatar" style="aspect-ratio: 2.9" />
+                </a>
+                <form asp-page="/Account/Logout">
+                    <button type="submit" class="btn btn-purple">Logout</button>
+                </form>
+            }
+            else
+            {
+                <div class="d-flex gap-2"> 
+                <a class="btn btn-purple" asp-page="/Account/Register">Register</a>
+                <a class="btn btn-outline-dark" asp-page="/Account/Login">Login</a>
+                </div> 
+            }
+        </nav>
+    </header>
+
+    <div class="container">
+        @if (!string.IsNullOrEmpty(ViewData["Message"] as string))
+        {
+            <div class="alert btn-purple-outline text-center" id="hide-message"><span class="fw-bolder">@ViewData["Message"]</span></div>
+        }
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+   @*  <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - iBlog - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer> *@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,78 @@
+﻿@using Humanizer
+@using System.Text.RegularExpressions
+@model BlogModel
+@inject UserManager<ApplicationUser> _userManager
+@{
+}
+<style>
+    .toggle-btn {
+        cursor: default;
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-radius: 0;
+    }
+
+    .options-dropdown {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    .options-menu {
+        display: none;
+        margin-top: 2em;
+    }
+
+    .options-dropdown:hover .options-menu {
+        display: grid;
+    }
+
+</style>
+<article class="blog-card">
+    <img src="@Model.ImageUrlPath" alt="Time travel concept" class="blog-image" />
+    <p class="blog-title fw-bolder">@Model.Title</p>
+    <div class="read-more-div" style="flex-direction: column;">
+        <div class="blog-meta" style="flex-grow: 1">
+            <span class="meta-item">@Model.Category</span>
+            <span class="meta-item">|</span>
+            <a asp-page="/Account/Profile" asp-route-userId="@Model.AuthorId" style=" color: #6119bf;">@Model.Author.UserName</a>
+        </div>
+        @if (ViewData["show-view-btn"] is bool == true)
+        {
+            <a asp-action="GetBlog" asp-controller="Blog" asp-route-id="@Model.Id" class="read-more btn-purple-outline" style="flex-grow: 0">Read</a>
+        }
+    </div>
+
+
+    @if (User != null && User.Identity != null)
+    {
+        @if ((User.Identity.IsAuthenticated && _userManager.GetUserId(User) == Model.AuthorId)|| User.IsInRole("Admin"))
+        {
+            @* Blog Options *@
+            @if (ViewData["show-edit-delete-btn"] is bool == true)
+            {
+                <div class="options-dropdown">
+                    <span class=" btn-sm btn-purple toggle-btn"><i aria-hidden="true" class="fas fa-caret-down"></i></span>
+                    <div class="list-group options-menu">
+                        <a asp-action="EditBlog" asp-controller="Blog" asp-route-id="@Model.Id" class="list-group-item text-primary">Edit</a>
+                        <a asp-action="DeleteBlog" asp-controller="Blog" asp-route-id="@Model.Id" class="list-group-item text-danger">Delete</a>
+                    </div>
+                </div>
+
+            }
+            @* Delete Page Options *@
+            @if (ViewData["show-delete-btn"] is bool == true)
+            {
+                <p style="padding-inline: 10px;"><span class="text-danger fw-bold">WARNING:</span> Once it is deleted, the action can't be undone. Do you want to continue?</p>
+                <form method="post" asp-action="DeleteBlog" class="mt-3 d-flex align-self-stretch btn-group" asp-controller="Blog">
+                    <button type="submit" class="btn btn-outline-danger rounded-0 border-0 border-end flex-grow-1">Confirm</button>
+                    <a asp-action="Index" asp-controller="Blog" class="btn btn-outline-dark border-0 flex-grow-1">Cancel</a>
+                </form>
+            }
+        }
+
+    }
+
+</article>
+

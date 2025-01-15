@@ -1,0 +1,19 @@
+﻿@page
+@model iBlog.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Admin Page";
+
+}
+<main style="display:grid; margin: auto; max-width:750px" class="mt-4 shadow">
+    <div>
+        <h4 class="p-2 bg-light">Admin Panel</h4>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a class="nav-link" asp-page="Users">Users</a>
+            </li>
+            <li class="list-group-item">
+                <a class="nav-link" asp-page="UserPosts">Posts</a>
+            </li>
+        </ul>
+    </div>
+</main>

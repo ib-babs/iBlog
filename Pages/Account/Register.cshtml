@@ -1,0 +1,31 @@
+﻿@page
+@attribute [AllowAnonymous]
+@model iBlog.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+<main style="display:grid; margin: auto; max-width:700px" class="mt-4">
+    <div class="mt-4">
+        <h2>Register</h2>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form method="post" class="mt-4">
+            <div class="mb-3">
+                <label asp-for="@Model.RegisterData.Email" class="form-label">Email</label>
+                <input asp-for="@Model.RegisterData.Email" class="form-control" />
+                <span asp-validation-for="@Model.RegisterData.Email" class="text-danger"></span>
+
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.RegisterData.UserName" class="form-label">Username</label>
+                <input asp-for="@Model.RegisterData.UserName" class="form-control" />
+                <span asp-validation-for="@Model.RegisterData.UserName" class="text-danger"></span>
+            </div>
+            <div class="mb-4">
+                <label asp-for="@Model.RegisterData.Password" class="form-label">Password</label>
+                <input asp-for="@Model.RegisterData.Password" class="form-control" />
+                <span asp-validation-for="@Model.RegisterData.Password" class="text-danger"></span>
+            </div>
+            <button type="submit" class="header-btn btn btn-outline-dark rounded-0">Register</button>
+        </form>
+    </div>
+</main>

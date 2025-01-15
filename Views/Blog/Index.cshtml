@@ -1,0 +1,30 @@
+﻿@model PageListView
+@inject UserManager<ApplicationUser> _userManager
+@{
+    ViewData["Title"] = "Home";
+    ViewData["show-edit-delete-btn"] = true;
+    ViewData["show-view-btn"] = true;
+    ViewData["UserID"] = _userManager.GetUserId(User);
+    ViewData["Message"] = Model.Message;
+}
+<link rel="stylesheet" href="/css/Index.css">
+<partial name="_CategoriesNavBar" model="Model" />
+@if (Model.Blogs != null && Model.Blogs.Count() > 0)
+{
+
+
+    <main class="blog-grid">
+        @foreach (var blog in Model.Blogs)
+        {
+            <partial name="_BlogView" model="blog" />
+        }
+    </main>
+    <div page-model="Model.PageInfo" page-action="Index" category="@Model.Category" page-class-enabled="true" page-selected-class="btn btn-dark" page-unselected-class="btn btn-outline-dark" class="text-center"></div>
+}
+else
+{
+    <div class="container">
+        <i>No posts!</i>
+    </div>
+
+}

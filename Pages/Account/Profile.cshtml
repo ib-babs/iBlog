@@ -1,0 +1,102 @@
+﻿@page "{userId}"
+@model iBlog.Pages.Account.ProfileModel
+@inject UserManager<ApplicationUser> _userManager
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["show-edit-delete-btn"] = true;
+    ViewData["show-view-btn"] = true;
+    ViewData["IsPage"] = true;
+    ViewData["Message"] = Model.Message;
+    ViewData["UserID"] = Model.ProfileUser?.Id;
+
+}
+<style>
+    #profile-panel {
+        position: fixed;
+        inset: 30px;
+        background: white;
+    }
+</style>
+
+@if (Model.ProfileUser != null)
+{
+    <section class="user-info">
+
+        <div class="user-details">
+            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d36ea9b2ff12b191b01b86abf793f36575ecbcacefae50beac8362b2659b3c4a?placeholderIfAbsent=true&apiKey=be9dd76967b54f6f9d2e8ebdbf61012b" alt="User avatar" class="user-avatar" />
+            <span class="username">@Model.ProfileUser.UserName</span>
+        </div>
+        <span class="post-count">@Model.ProfileUser.Posts?.Count Post(s)</span>
+        @if (User != null && User.Identity != null)
+        {
+            @if ((User.Identity.IsAuthenticated && _userManager.GetUserId(User) == Model.ProfileUser.Id) || User.IsInRole("Admin"))
+            {
+                <button class="btn-sm btn-dark show-profile-edit-form">Edit Profile</button>
+            }
+
+        }
+    </section>
+    <partial name="_CategoriesNavBar" model="Model.PageView" />
+
+    @* Profile Blogs *@
+    <div>
+        @if (Model.PageView != null && Model.PageView.Blogs != null && Model.PageView.Blogs.Count() > 0)
+        {
+            <main class="blog-grid">
+
+                @foreach (var blog in Model.PageView.Blogs)
+                {
+                    <partial name="_BlogView" model="blog" />
+                }
+            </main>
+            <div page-model="Model.PageView?.PageInfo" is-page="true" page-action="./Profile" category="@Model.PageView?.Category" page-class-enabled="true" page-selected-class="btn btn-dark" page-unselected-class="btn btn-outline-dark" class="text-center"></div>
+        }
+        else
+        {
+            <p><i>No post.</i></p>
+        }
+    </div>
+
+
+    @* Edit Profile *@
+    @if (User != null && User.Identity != null)
+    {
+        @if ((User.Identity.IsAuthenticated && _userManager.GetUserId(User) == Model.ProfileUser.Id) || User.IsInRole("Admin"))
+        {
+            <main style="display:grid; margin: auto; max-width:750px" class="mt-4 shadow profile-panel">
+                <div>
+                    <h4 class="border-bottom bg-light p-2">Profile Info</h4>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <form asp-page-handler="EditProfile" asp-route-userId="@Model.ProfileUser.Id" method="post" class="p-3 ">
+                        <div class="mb-3">
+                            <label asp-for="@Model.ProfileForm.Email" class="form-label">Email</label>
+                            <input asp-for="@Model.ProfileForm.Email" class="form-control" required value="@Model.ProfileUser.Email" />
+                            <span asp-validation-for="@Model.ProfileForm.Email" class="text-danger"></span>
+
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="@Model.ProfileForm.UserName" class="form-label">Username</label>
+                            <input asp-for="@Model.ProfileForm.UserName" class="form-control" value="@Model.ProfileUser.UserName" />
+                            <span asp-validation-for="@Model.ProfileForm.UserName" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark rounded-0">Save Changes</button>
+                    </form>
+                   <form asp-page-handler="UpdatePassword" asp-route-userId="@Model.ProfileUser.Id" method="post" class="p-3 ">
+                        <p>Change Password</p>
+                        <div class="mb-3">
+                            <input name="oldpassword" class="form-control" placeholder="Old password" />
+                            @* <span asp-validation-for="@Model.Password.OldPassword" class="text-danger"></span> *@
+                        </div>
+                        <div class="mb-3">
+                            <input name="newpassword" class="form-control" placeholder="New password" />
+                            @* <span asp-validation-for="@Model.Password.NewPassword" class="text-danger"></span> *@
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark rounded-0">Change Password</button>
+                        <button type="button" class="btn btn-purple-outline rounded-0 hide-profile-panel">Hide Panel</button>
+                    </form>
+                </div>
+            </main>
+        }
+
+    }
+}

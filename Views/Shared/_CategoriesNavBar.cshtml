@@ -1,0 +1,38 @@
+﻿@model PageListView
+@inject UserManager<ApplicationUser> _userManager
+<nav class="category-nav">
+    @if (User != null && User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        @if (_userManager.GetUserId(User) == ViewData["UserID"] as string)
+        {
+            <a class="btn btn-outline-dark" asp-action="PostBlog">
+                <i aria-hidden="true" class="fa fa-plus-circle"></i>
+                <span class="create-text">Create</span>
+            </a>
+        }
+    }
+    @if (Model.Categories != null && Model.Categories.Count() > 0)
+    {
+        @if (ViewData["IsPage"] is bool == false)
+        {
+            <a asp-action="Index" class="@(string.IsNullOrEmpty(Model.Category) ? "category-item-active" : "category-item-inactive")" asp-controller="Blog">All</a>
+        }
+        else
+        {
+            <a asp-page="/Account/Profile" class="@(string.IsNullOrEmpty(Model.Category) ? "category-item-active" : "category-item-inactive")" asp-route-userId="@Model.Blogs?.FirstOrDefault()?.AuthorId">All</a>
+        }
+        @foreach (string category in Model.Categories)
+        {
+            @if (ViewData["IsPage"] is bool == false)
+            {
+
+
+                <a asp-action="Index" class="@(category == Model.Category ? "category-item-active" : "category-item-inactive")" asp-controller="Blog" asp-route-category="@category">@category</a>
+            }
+            else
+            {
+                <a asp-page="/Account/Profile" class="@(category == Model.Category ? "category-item-active" : "category-item-inactive")" asp-route-userId="@Model.Blogs?.FirstOrDefault()?.AuthorId" asp-route-category="@category">@category</a>
+            }
+        }
+    }
+</nav>

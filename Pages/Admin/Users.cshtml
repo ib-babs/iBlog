@@ -1,0 +1,89 @@
+﻿@page
+@model iBlog.Pages.Admin.UsersModel
+@{
+    ViewData["Title"] = "Users";
+}
+<style>
+    a {
+        color: #6119bf;
+    }
+</style>
+
+
+@if (Model.ApplicationUsers != null && Model.ApplicationUsers.Count > 0)
+{
+    <table class="table table-light table-striped table-sm mt-4">
+        <thead>
+            <tr>
+                <th class="col">UserID</th>
+                <th class="col">Email</th>
+                <th class="col">Username</th>
+                <th class="col">Posts</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.ApplicationUsers)
+            {
+                <main style="display:grid; margin: auto; max-width:750px" class="mt-4 shadow profile-panel">
+                    <div>
+                        <h4 class="border-bottom bg-light p-2">Profile Info</h4>
+                        <div class="p-3">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <form asp-page="/Account/Profile" asp-page-handler="EditProfile" asp-route-userId="@user.Id">
+                                <div class="mb-3">
+                                    <label asp-for="@Model.ProfileForm.Email" class="form-label">Email</label>
+                                    <input asp-for="@Model.ProfileForm.Email" class="form-control" value="@user.Email" />
+                                    <span asp-validation-for="@Model.ProfileForm.Email" class="text-danger"></span>
+
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="@Model.ProfileForm.UserName" class="form-label">Username</label>
+                                    <input asp-for="@Model.ProfileForm.UserName" class="form-control" value="@user.UserName" />
+                                    <span asp-validation-for="@Model.ProfileForm.UserName" class="text-danger"></span>
+                                </div>
+                                <button type="submit" class="btn btn-outline-dark rounded-0">Save Changes</button>
+                                <button type="button" class="btn btn-purple-outline rounded-0 hide-profile-panel">Hide Panel</button>
+                            </form>
+                        </div>
+                    </div>
+                </main>
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Email</td>
+                    <td><a asp-page="/Account/Profile" asp-route-userId="@user.Id">@user.UserName</a></td>
+                    <td>
+                        @if (user.Posts?.Count > 0)
+                        {
+                            <a asp-page="UserPosts" asp-route-userId="@user.Id">Check Posts</a>
+                        }
+                        else
+                        {
+                            <i>No posts</i>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn-sm btn-dark show-profile-edit-form">Edit</button>
+                        <button class="btn-sm btn-danger show-delete-panel">Delete</button>
+                        <main style="display:grid; margin: auto; max-width:300px; align-self: center" class="mt-4 shadow rounded-2 delete-panel">
+                            <div>
+                                <h6 class="p-2 bg-light text-muted">Delete <span class="fw-bold">@user.UserName</span></h6>
+                                <p class="p-3 mt-3 mb-3"><span class="text-danger">WARNING:</span> Are you sure about this action? It can't be undone once confirmed</p>
+                                <form asp-page-handler="DeleteUser" asp-route-userId="@user.Id">
+                                    <div class="d-flex">
+                                        <button class="btn btn-outline-danger border-0 rounded-0 flex-grow-1 border-end">Confirm</button>
+                                        <button type="button" class="btn btn-outline-dark border-0 rounded-0 flex-grow-1 hide-delete-panel">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </main>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <i>No users!</i>
+}
