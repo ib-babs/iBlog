@@ -43,6 +43,7 @@ namespace iBlog.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetBlog(int id)
         {

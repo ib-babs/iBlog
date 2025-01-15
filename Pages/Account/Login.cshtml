@@ -1,23 +1,10 @@
 ﻿@page
 @attribute [AllowAnonymous]
 @model iBlog.Pages.Account.LoginModel
-@inject IConfiguration config
 @{
     ViewData["Title"] = "Login";
-    var cn = config.GetConnectionString("iBlogConn");
 }
-@if (string.IsNullOrEmpty(cn))
-{
-    <div class="alert alert-danger" role="alert">
-        <strong>Connection string is not set!</strong> Please set the connection string in appsettings.json file.
-    </div>
-}
-else
-{
-    <div class="alert alert-success" role="alertdialog">
-        <strong>@cn</strong> 
-    </div>
-}
+
 
 
 <main style="display:grid; margin: auto; max-width:700px" class="mt-4">
